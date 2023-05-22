@@ -2,9 +2,11 @@ const win = 1
 const lose = 2
 const tie = 0
 
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice(max=3, min=1) {
     let choice = Math.floor(Math.random() * (max - min + 1) + min)
-    console.log(choice)
     switch(choice) {
         case 1:
             return 'rock'
@@ -19,41 +21,77 @@ function getComputerChoice(max=3, min=1) {
 
 function play(playerChoice, computerChoice) {
     playerChoice = playerChoice.toLowerCase()
+    const newElement = document.createElement('div');
+    newElement.classList.add('actions');
+    newElement.textContent = `Your opponent chose ${computerChoice}`;
+    const actions = document.querySelector('.actions');
+    actions.replaceWith(newElement);
     if (playerChoice === computerChoice) {
-        console.log('Tie!')
         return tie
     } else if ((playerChoice == 'rock' && computerChoice == 'scissors') || 
         (playerChoice == 'scissors' && computerChoice == 'paper') ||
         (playerChoice == 'paper' && computerChoice == 'rock')) 
     {
-        console.log('You Win')
         return win
     } else if ((playerChoice == 'rock' && computerChoice == 'paper') ||
             (playerChoice == 'paper' && computerChoice == 'scissors') ||
             (playerChoice == 'scissors' && computerChoice == 'rock')) 
     {
-        console.log('You lose')
         return lose
     }
 }
 
-function game() {
-    let playerScore = 0
-    let computerScore = 0
-    for (let i = 0; i < 5; i++) {
-        playerChoice = prompt('Enter your move:')
-        let result = play(playerChoice, getComputerChoice())
-        if (result == win) {
-            playerScore += 1
-        } else if (result == lose) {
-            computerScore += 1
-        }
+function endGame() {
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.disabled = true;
+    })
+    const scoreDiv = document.getElementById('score');
+    if (playerScore === 5) {
+        scoreDiv.textContent = `You Win!`;
+    } else if (computerScore === 5) {
+        scoreDiv.textContent = `You Lose.`;
     }
-    if (playerScore > computerScore) {
-        console.log('You Win! ' + playerScore + ' to ' + computerScore)
-    } else if (playerScore == computerScore) {
-        console.log('It was a tie!')
+    
+    const restartButton = document.createElement('button');
+    restartButton.id = 'restartButton';
+    restartButton.textContent = 'Play Again';
+    restartButton.style.alignSelf = 'center';
+    scoreDiv.insertAdjacentElement('afterend', restartButton);
+    restartButton.addEventListener('click', restartGame);
+}
+
+function restartGame() {
+    const buttons = document.querySelectorAll('button')
+    buttons.forEach(button => {
+        button.disabled = false;
+    })
+    playerScore = 0;
+    computerScore = 0;
+    const scoreDiv = document.getElementById('score');
+    scoreDiv.textContent = `Your Score: ${playerScore} | Opponent's Score: ${computerScore}`;
+    const restartButton = document.getElementById('restartButton');
+    restartButton.remove();
+}
+
+function game(playerChoice) {
+    let result = play(playerChoice, getComputerChoice());
+    if (result == win) {
+        playerScore += 1;
+    } else if (result == lose) {
+        computerScore += 1;
+    }
+    if (playerScore === 5 || computerScore === 5) {
+        endGame()
     } else {
-        console.log('You Lose. ' + playerScore + ' to ' + computerScore)
+        const scoreDiv = document.getElementById('score');
+        scoreDiv.textContent = `Your Score: ${playerScore} | Opponent's Score: ${computerScore}`;
     }
 }
+
+const buttons = document.querySelectorAll('button');
+buttons.forEach(button => {
+    button.addEventListener('click', function() {
+        game(button.id);
+    });
+})

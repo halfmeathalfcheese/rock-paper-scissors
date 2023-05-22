@@ -1,0 +1,43 @@
+h1 {
+    text-align: center;
+    margin: 0px;
+    padding: 12px;
+}
+
+body {
+    margin: 0px;
+}
+
+.header {
+    background-color: cornflowerblue;
+}
+
+.sub-head {
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 32px;
+}
+
+.button {
+    height: 15%;
+    width: 15%;
+    border: 4px solid black;
+    background-color: #eaeaea;
+    padding: 0px;
+}
+
+.button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+
+}
+
+.actions {
+    text-align: center;
+    
+}
