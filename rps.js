@@ -19,13 +19,22 @@ function getComputerChoice(max=3, min=1) {
     }
 }
 
+function handleClick(button) {
+    button.classList.add("clicked");
+    
+    setTimeout(() => {
+        button.classList.remove("clicked");
+    }, 100);
+}
+
 function play(playerChoice, computerChoice) {
     playerChoice = playerChoice.toLowerCase()
     const newElement = document.createElement('div');
     newElement.classList.add('actions');
-    newElement.textContent = `Your opponent chose ${computerChoice}`;
+    newElement.textContent = `Your opponent chose ${computerChoice}.`;
     const actions = document.querySelector('.actions');
     actions.replaceWith(newElement);
+
     if (playerChoice === computerChoice) {
         return tie
     } else if ((playerChoice == 'rock' && computerChoice == 'scissors') || 
@@ -92,6 +101,7 @@ function game(playerChoice) {
 const buttons = document.querySelectorAll('button');
 buttons.forEach(button => {
     button.addEventListener('click', function() {
+        handleClick(button);
         game(button.id);
     });
 })
